@@ -10,7 +10,7 @@ import UserEndpoint from './segments/user.js'
 import CorePlugin from './segments/core.js'
 import type { IPlugin } from "@spotube-app/plugin"
 
-class TemplateMetadataProviderPlugin implements IPlugin {
+export default class TemplateMetadataProviderPlugin implements IPlugin {
   audioSource: AudioSourceEndpoint;
   auth: AuthEndpoint;
   album: AlbumEndpoint;
@@ -35,5 +35,3 @@ class TemplateMetadataProviderPlugin implements IPlugin {
     this.user = new UserEndpoint()
   }
 }
-
-export { TemplateMetadataProviderPlugin }

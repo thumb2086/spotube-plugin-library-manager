@@ -8,14 +8,13 @@ const args = process.argv.slice(2);
 async function build() {
   await esbuild
     .build({
-      entryPoints: ["src/index.ts"], // your main TS file
+      entryPoints: ["src/index.ts"],
       outfile: "dist/bundle.js",
+      format: "cjs",
       bundle: true,
-      minify: true, // optional: minify output
-      sourcemap: true, // optional: .js.map
-      platform: "browser", // or 'browser'
-      format: "cjs", // 'cjs', 'esm', or 'iife'
-      target: "es2021", // JS target
+      minify: true,
+      platform: "browser",
+      target: "es2021",
     })
     .catch(() => process.exit(1));
 
@@ -36,4 +35,4 @@ async function build() {
   await fs.writeFile(pluginOutPath, zipBuffer);
 }
 
-build()
+build();
