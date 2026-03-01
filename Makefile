@@ -3,11 +3,11 @@
 all: build
 
 build:
-	hetu build
+	zip -r plugin.smplug src plugin.json LICENSE README.md
 
 archive:
 	mkdir -p build
-	cp *.smplug build/plugin.smplug
+	cp plugin.smplug build/plugin.smplug
 
 clean:
 	rm -f *.smplug

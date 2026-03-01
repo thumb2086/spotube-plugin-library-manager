@@ -1,11 +1,5 @@
 name: Plugin Build
 on:
-  # push:
-  #   branches:
-  #     - main
-  # pull_request:
-  #   branches:
-  #     - main
   workflow_dispatch:
     inputs:
       version:
@@ -26,23 +20,11 @@ jobs:
         with:
           submodules: true
 
-      - name: Setup Flutter
-        uses: subosito/flutter-action@v2
-        with:
-          channel: stable
-          flutter-version: 3.35.2
+      - name: Install ZIP
+        run: sudo apt-get update && sudo apt-get install -y zip
 
-      - name: Add Dart SDK to PATH
-        run: |
-          echo "$HOME/.pub-cache/bin" >> $GITHUB_PATH
-          echo "/opt/hostedtoolcache/flutter/common/flutter/bin/cache/dart-sdk/bin" >> $GITHUB_PATH
-
-      - name: Install dependencies
-        run: dart pub global activate hetu_script_dev_tools
-      
       - name: Run build and archive
         run: |
-          export PATH="$PATH:$HOME/.pub-cache/bin"
           make build
           make archive
         shell: bash
@@ -50,9 +32,10 @@ jobs:
       - name: Upload plugin archive
         uses: actions/upload-artifact@v4
         with:
+          name: plugin-archive
           path: build/plugin.smplug
 
-      - name: Upload to release (${{ github.event.inputs.version }})
+      - name: Create Release
         uses: ncipollo/release-action@v1
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
