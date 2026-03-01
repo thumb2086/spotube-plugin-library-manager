@@ -32,14 +32,16 @@ jobs:
           channel: stable
           flutter-version: 3.35.2
 
+      - name: Add Dart SDK to PATH
+        run: echo "$HOME/.pub-cache/bin" >> $GITHUB_PATH
+
       - name: Install dependencies
         run: dart pub global activate hetu_script_dev_tools
       
-      - name: Run build
-        run: make
-
-      - name: Archive plugin
-        run: make archive
+      - name: Run build and archive
+        run: |
+          make build
+          make archive
         shell: bash
       
       - name: Upload plugin archive

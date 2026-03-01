@@ -3,7 +3,7 @@
 all: build
 
 build:
-	hetu build
+	dart pub global run hetu_script_dev_tools:hetu build
 
 archive:
 	mkdir -p build
