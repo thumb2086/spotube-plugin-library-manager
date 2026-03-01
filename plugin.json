@@ -7,7 +7,6 @@
   "license": "GPL-3.0",
   "repository": "https://github.com/thumb2086/spotube-plugin-library-manager",
   "entryPoint": "LibraryManager",
-  "type": "metadata",
   "pluginApiVersion": "2.0.0",
   "apis": [
     "webview",
