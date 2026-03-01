@@ -6,72 +6,69 @@ import "dashboard.ht" as dash;
 
 import "module:spotube_plugin" as spotube;
 
-fun main() {
-  var deduplicator = dedup.Deduplicator();
-  var queueController = qc.QueueController();
-  var m3u8Generator = m3u8_gen.M3U8Generator();
-  var exporter = export_core.Exporter();
+class LibraryManager {
+  var deduplicator;
+  var queueController;
+  var m3u8Generator;
+  var exporter;
+
+  construct() {
+    this.deduplicator = dedup.Deduplicator();
+    this.queueController = qc.QueueController();
+    this.m3u8Generator = m3u8_gen.M3U8Generator();
+    this.exporter = export_core.Exporter();
+    this.exporter.m3u8Generator = this.m3u8Generator;
+  }
+
+  // Core methods that Spotube looks for
   
-  exporter.m3u8Generator = m3u8Generator;
+  fun hello() { 
+    spotube.notify("Library Manager Plugin fully loaded!"); 
+  }
+  
+  fun getDashboard() {
+    return dash.getDashboard();
+  }
 
-  var pluginEndpoints = {
-    
-    // Core loaded event
-    "hello": fun() { 
-      spotube.notify("Library Manager Plugin fully loaded!"); 
-    },
-    
-    // Get dashboard HTML for Spotube Desktop/Mobile WebView
-    "getDashboard": fun() {
-      return dash.getDashboard();
-    },
-
-    // Example smart queue endpoint
-    "smartQueueAll": fun(tracks) {
-      spotube.notify("Queueing " + tracks.length.toString() + " tracks...");
-      // Simulate adding
-      for (var i = 0; i < tracks.length; i = i + 1) {
-        var track = tracks[i];
-        if (!deduplicator.isDuplicate(track.id)) {
-          deduplicator.markAsDownloaded(track.id, "/temp/" + track.id + ".mp3");
-          queueController.addTask(track, fun(res) {
-             m3u8Generator.addTrack({
-               "artist": res.artist,
-               "title": res.title,
-               "duration": "180", // hypothetical
-               "filePath": "/temp/" + res.id + ".mp3"
-             });
-             spotube.notify("Downloaded: " + res.title);
-          });
-        } else {
-          spotube.notify("Skipping duplicate: " + track.title);
-        }
+  fun smartQueueAll(tracks) {
+    spotube.notify("Queueing " + tracks.length.toString() + " tracks...");
+    for (var i = 0; i < tracks.length; i = i + 1) {
+      var track = tracks[i];
+      if (!this.deduplicator.isDuplicate(track.id)) {
+        this.deduplicator.markAsDownloaded(track.id, "/temp/" + track.id + ".mp3");
+        this.queueController.addTask(track, fun(res) {
+           this.m3u8Generator.addTrack({
+             "artist": res.artist,
+             "title": res.title,
+             "duration": "180",
+             "filePath": "/temp/" + res.id + ".mp3"
+           });
+           spotube.notify("Downloaded: " + res.title);
+        });
+      } else {
+        spotube.notify("Skipping duplicate: " + track.title);
       }
-      return {"status": "success", "queued": queueController.queue.length};
-    },
-
-    // Example generator endpoint
-    "generateM3U8": fun(playlistName) {
-      if (playlistName == null) {
-        playlistName = "Exported_Playlist";
-      }
-      m3u8Generator.init(playlistName);
-      var m3u8Content = m3u8Generator.generate();
-      spotube.notify("M3U8 generated successfully.");
-      return {"content": m3u8Content};
-    },
-    
-    // Example Exporter
-    "exportToFolder": fun(targetFolder) {
-      if (targetFolder == null) {
-        return {"error": "Target folder not specified."};
-      }
-      exporter.setTargetFolder(targetFolder);
-      var result = exporter.exportFiles(deduplicator.getDownloadedFiles(), "USB_Export");
-      spotube.notify("Export complete! " + result.exportedFiles.toString() + " files copied.");
-      return result;
     }
-  };
+    return {"status": "success", "queued": this.queueController.queue.length};
+  }
 
-  return pluginEndpoints;
+  fun generateM3U8(playlistName) {
+    if (playlistName == null) {
+      playlistName = "Exported_Playlist";
+    }
+    this.m3u8Generator.init(playlistName);
+    var m3u8Content = this.m3u8Generator.generate();
+    spotube.notify("M3U8 generated successfully.");
+    return {"content": m3u8Content};
+  }
+  
+  fun exportToFolder(targetFolder) {
+    if (targetFolder == null) {
+      return {"error": "Target folder not specified."};
+    }
+    this.exporter.setTargetFolder(targetFolder);
+    var result = this.exporter.exportFiles(this.deduplicator.getDownloadedFiles(), "USB_Export");
+    spotube.notify("Export complete! " + result.exportedFiles.toString() + " files copied.");
+    return result;
+  }
 }

@@ -20,8 +20,14 @@ jobs:
         with:
           submodules: true
 
-      - name: Install ZIP
-        run: sudo apt-get update && sudo apt-get install -y zip
+      - name: Setup Dart
+        uses: dart-lang/setup-dart@v1
+
+      - name: Install dependencies
+        run: dart pub global activate hetu_script_dev_tools
+      
+      - name: Add Pub Bin to Path
+        run: echo "$HOME/.pub-cache/bin" >> $GITHUB_PATH
 
       - name: Run build and archive
         run: |
@@ -33,7 +39,7 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: plugin-archive
-          path: build/plugin.smplug
+          path: plugin.smplug
 
       - name: Create Release
         uses: ncipollo/release-action@v1
@@ -44,4 +50,4 @@ jobs:
           omitNameDuringUpdate: true
           omitPrereleaseDuringUpdate: true
           allowUpdates: true
-          artifacts: build/plugin.smplug
+          artifacts: plugin.smplug
