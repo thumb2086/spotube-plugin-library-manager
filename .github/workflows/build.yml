@@ -33,13 +33,16 @@ jobs:
           flutter-version: 3.35.2
 
       - name: Add Dart SDK to PATH
-        run: echo "$HOME/.pub-cache/bin" >> $GITHUB_PATH
+        run: |
+          echo "$HOME/.pub-cache/bin" >> $GITHUB_PATH
+          echo "/opt/hostedtoolcache/flutter/common/flutter/bin/cache/dart-sdk/bin" >> $GITHUB_PATH
 
       - name: Install dependencies
         run: dart pub global activate hetu_script_dev_tools
       
       - name: Run build and archive
         run: |
+          export PATH="$PATH:$HOME/.pub-cache/bin"
           make build
           make archive
         shell: bash
