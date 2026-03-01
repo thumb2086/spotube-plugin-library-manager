@@ -13,7 +13,5 @@
     "webview",
     "localstorage"
   ],
-  "abilities": [
-    "metadata"
-  ]
+  "abilities": []
 }
