@@ -1,0 +1,7 @@
+import "module:spotube_plugin" as spotube;
+
+fun main() {
+  return {
+    "hello": fun() { spotube.notify("Library Manager loaded!"); }
+  };
+}

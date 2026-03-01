@@ -1,11 +1,10 @@
 {
-  "version": "1.0.0",
-  "name": "Alphanumeric plugin name with hyphens or underscore",
-  "author": "Your Name",
-  "description": "A brief description of the plugin's functionality.",
-  "entryPoint": "plugin class name",
-  "apis": ["webview", "localstorage", "timezone"],
-  "abilities": ["authentication", "scrobbling", "metadata", "audioSource"],
-  "repository": "https://github.com/KRTirtho/spotube-plugin-template",
-  "pluginApiVersion": "2.0.0"
+  "id": "com.thumb2086.library-manager",
+  "name": "Library Manager",
+  "version": "0.1.0",
+  "author": "thumb2086",
+  "description": "Smart Library Manager for Spotube: intelligent batch download queue, automatic deduplication, USB export, and M3U8 playlist generation to save space and preserve order",
+  "license": "GPL-3.0",
+  "repository": "https://github.com/thumb2086/spotube-plugin-library-manager",
+  "entryPoint": "src/plugin.ht"
 }
