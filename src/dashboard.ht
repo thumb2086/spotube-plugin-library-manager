@@ -1,1 +1,49 @@
-// Placeholder for Dashboard
+final String dashboardHtml = '''
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <title>Library Manager Dashboard</title>
+  <style>
+    body { font-family: sans-serif; padding: 20px; background: #121212; color: #fff; }
+    .card { background: #1e1e1e; padding: 15px; border-radius: 8px; margin-bottom: 20px; }
+    button { background: #1db954; color: black; border: none; padding: 10px 20px; font-weight: bold; border-radius: 4px; cursor: pointer; }
+    button:hover { background: #1ed760; }
+  </style>
+</head>
+<body>
+  <h1>Library Manager</h1>
+  
+  <div class="card">
+    <h3>Smart Queue</h3>
+    <p id="queueStatus">Active: 0 | Queued: 0</p>
+    <button onclick="window.spotube.invoke('smartQueueAll')">Queue All</button>
+  </div>
+  
+  <div class="card">
+    <h3>USB Export / M3U8 Generator</h3>
+    <p>Export downloaded songs and auto-generate M3U8 playlist.</p>
+    <button onclick="window.spotube.invoke('exportToFolder')">Export to USB</button>
+    <button onclick="window.spotube.invoke('generateM3U8')">Generate M3U8</button>
+  </div>
+  
+  <script>
+    // Hypothetical frontend communication snippet with Spotube Plugin backend
+    function updateStatus(active, queued) {
+      document.getElementById('queueStatus').innerText = 'Active: ' + active + ' | Queued: ' + queued;
+    }
+    
+    // Listen for backend events
+    if (window.spotube) {
+      window.spotube.on('queueUpdate', function(data) {
+        updateStatus(data.active, data.queued);
+      });
+    }
+  </script>
+</body>
+</html>
+''';
+
+fun getDashboard() {
+  return dashboardHtml;
+}

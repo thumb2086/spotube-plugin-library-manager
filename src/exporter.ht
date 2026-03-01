@@ -1,1 +1,22 @@
-// Placeholder for Exporter
+class Exporter {
+  var targetPath = "";
+  var m3u8Generator = null;
+
+  fun setTargetFolder(path) {
+    this.targetPath = path;
+  }
+
+  fun exportFiles(filesToExport, playlistName) {
+    // In actual implementation, this would use Spotube's file system API to copy files
+    // to targetPath.
+    
+    // Generates an M3U8 file alongside exported songs.
+    var m3u8Content = this.m3u8Generator.generate();
+    return {
+      "status": "success",
+      "exportedFiles": filesToExport.length,
+      "path": this.targetPath,
+      "m3u8": m3u8Content
+    };
+  }
+}

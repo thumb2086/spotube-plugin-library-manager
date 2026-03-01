@@ -1,1 +1,23 @@
-// Placeholder for M3U8 Generator
+class M3U8Generator {
+  var playlistName = "";
+  var tracks = [];
+
+  fun init(name) {
+    this.playlistName = name;
+    this.tracks = [];
+  }
+
+  fun addTrack(trackInfo) {
+    this.tracks.add(trackInfo);
+  }
+
+  fun generate() {
+    var content = "#EXTM3U\n";
+    for (var i = 0; i < this.tracks.length; i = i + 1) {
+      var track = this.tracks[i];
+      content = content + "#EXTINF:" + track.duration + "," + track.artist + " - " + track.title + "\n";
+      content = content + track.filePath + "\n";
+    }
+    return content;
+  }
+}

@@ -1,1 +1,18 @@
-// Placeholder for Deduplicator
+class Deduplicator {
+  var knownSignatures = {};
+
+  fun isDuplicate(trackId) {
+    if (this.knownSignatures.containsKey(trackId)) {
+      return true;
+    }
+    return false;
+  }
+
+  fun markAsDownloaded(trackId, filePath) {
+    this.knownSignatures[trackId] = filePath;
+  }
+  
+  fun getDownloadedFiles() {
+    return this.knownSignatures.values.toList();
+  }
+}

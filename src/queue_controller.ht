@@ -1,1 +1,41 @@
-// Placeholder for Queue Controller
+import "module:spotube_plugin" as spotube;
+
+class QueueController {
+  var queue = [];
+  var activeCount = 0;
+  final maxConcurrent = 3;
+
+  fun addTask(taskData, onComplete) {
+    var task = {
+      "data": taskData,
+      "onComplete": onComplete
+    };
+    this.queue.add(task);
+    this.processQueue();
+  }
+
+  fun processQueue() {
+    if (this.activeCount >= this.maxConcurrent || this.queue.length == 0) {
+      return;
+    }
+
+    this.activeCount = this.activeCount + 1;
+    var task = this.queue.removeAt(0);
+
+    // Simulate async download via plugin messaging or generic async
+    spotube.notify("Starting download: " + task["data"].name);
+    
+    // In a real scenario, this would interact with Spotube's download system await
+    // We simulate completion handling here
+    task.onComplete(task["data"]);
+    this.activeCount = this.activeCount - 1;
+    this.processQueue();
+  }
+  
+  fun getStatus() {
+    return {
+      "queued": this.queue.length,
+      "active": this.activeCount
+    };
+  }
+}
